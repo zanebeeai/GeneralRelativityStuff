@@ -1,7 +1,4 @@
-import numpy as np
-import random as rd
 from image import Image
-
 
 class Pixel():
 

@@ -6,10 +6,10 @@ class Image():
   def __init__(self, rows, columns):
     self.rows = rows
     self.columns = columns
-    self.pixels = [[None for _ in range(rows)] for _ in range(columns)]
+    self.pixels = np.array([[None for _ in range(rows)] for _ in range(columns)] )
 
-  def set_pixel(self, x, y, pixel):
-    self.pixels[y][x] = pixel
+  def set_pixels(self, photo):
+    self.pixels = photo
 
   def draw_image(self, img_file):
 

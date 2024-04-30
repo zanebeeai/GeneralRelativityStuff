@@ -1,5 +1,4 @@
 import numpy as np
-
 # cleared
 
 def Point(x, y, z):
