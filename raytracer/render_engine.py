@@ -103,7 +103,7 @@ class RenderEngine:
     print("Elapsed time: {:3.2f} seconds".format(time.time()-start))
     geodesics = np.array(geodesics)
     print(geodesics.shape)
-    self.plot(geodesics, scene)
+    # self.plot(geodesics, scene)
 
     return geodesics
 
@@ -179,7 +179,7 @@ class RenderEngine:
       if dist and (dist_min is None or dist < dist_min):
         dist_min = dist
         obj_hit = obj
-        
+
 
     return Color.get_pixel(0,0,0) if obj_hit is None else Color.get_pixel(0,0,0) +  self.color_at(obj_hit)
 
