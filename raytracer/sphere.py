@@ -11,21 +11,18 @@ class Sphere():
 
   def intersects(self, ray):
 
-    oc = ray.origin - self.center
-    a = 1.0
-    b = 2.0 * np.dot(oc, ray.direction)
-    c = np.dot(oc, oc) - self.radius**2
-    discriminant = b**2 - 4*a*c
+    intersects_limit = 0.1
+    current_ray = ray[:, 1:4]
+    print((current_ray- self.center).shape)
+    print(np.linalg.norm(current_ray-self.center, axis=1).shape)
+    distance = np.min(np.linalg.norm(current_ray-self.center, axis=1) - intersects_limit)
+  
+    if distance <= 0:
+      return distance
 
-    if discriminant >= 0:
-      temp = (-b - np.sqrt(discriminant))/(2*a)
-      if temp > 0:
-        return temp
     return None
 
 
   def normal(self, surface_point):
     surface_point_normal = surface_point - self.center
     return surface_point_normal / np.linalg.norm(surface_point_normal)
-
-  

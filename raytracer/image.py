@@ -8,9 +8,6 @@ class Image():
     self.columns = columns
     self.pixels = [[None for _ in range(rows)] for _ in range(columns)]
 
-  def set_pixel(self, x, y, pixel):
-    self.pixels[y][x] = pixel
-
   def draw_image(self, img_file):
 
     img_file.write(f'P3 {self.rows} {self.columns}\n255\n')
