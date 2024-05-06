@@ -26,28 +26,24 @@ class RenderEngine:
     # replace this with setup for geodesic
 
     geodesicArray = np.zeros((width * height, 8))
+
     geodesicArray[:, 0] = 0
     geodesicArray[:, 1:4] = camera # camera position
 
-    positionArray = np.zeros((width * height, 3))
+    geodesicArray[:, 5] = np.tile(np.linspace(-1, 1, width), height)
+    geodesicArray[:,6] = np.repeat(np.linspace(-1, 1, height), width)
+    geodesicArray[:, 7] = 1
 
-    positionArray[:, 0] = np.arange(0, width*height, 1) % width
-    positionArray[:, 0] = x0 + positionArray[:, 0] * xstep
-
-    positionArray[:, 1] = np.arange(0, width*height, 1) // width
-    positionArray[:, 1] = y0 + positionArray[:, 1] * ystep
-
-    positionArray[:, :] = positionArray[:,:] - camera
-
-    geodesicArray[:, 5:] = positionArray/np.linalg.norm(positionArray, axis=1, keepdims=True)
+    geodesicArray[:, 5:] = geodesicArray[:, 5:] / np.linalg.norm(geodesicArray[:, 5:], axis=1, keepdims=True)
 
     args = (
             geodesicArray[:,0],geodesicArray[:, 1], geodesicArray[:, 2], geodesicArray[:, 3],
-            geodesicArray[:, 5], geodesicArray[:, 6],
-            geodesicArray[:, 7], gr_object.vs_val, gr_object.R_val, gr_object.sigma_val, gr_object.c_val
+            gr_object.vs_val, gr_object.R_val, gr_object.sigma_val, gr_object.c_val,
+            geodesicArray[:, 5], geodesicArray[:, 6], geodesicArray[:, 7]
             )
-    geodesicArray[:, 4] = gr_object.pt1(*args)  # initial null momentum
 
+    geodesicArray[:, 4] = gr_object.pt1(*args)  # initial null momentum
+    print(geodesicArray[:,4])
     print("starting geodesic computation")
 
     geodesics = self.evaluate_geodesic(geodesicArray, scene)
@@ -101,6 +97,7 @@ class RenderEngine:
       print("Percentage done: {:3.5f} %".format((i/iterations)*100), end="\r")
 
     print("Elapsed time: {:3.2f} seconds".format(time.time()-start))
+
     geodesics = np.array(geodesics)
     print(geodesics.shape)
     # self.plot(geodesics, scene)
@@ -162,7 +159,6 @@ class RenderEngine:
   def ray_trace(self, geods, scene):
 
     pixels = np.zeros((scene.width * scene.height), dtype=object)
-
     for i in range(scene.width * scene.height):
 
       pixels[i] = self.find_nearest(geods[i], scene)

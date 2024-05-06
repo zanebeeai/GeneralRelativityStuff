@@ -13,10 +13,10 @@ class Sphere():
 
     intersects_limit = 0.1
     current_ray = ray[:, 1:4]
-    print((current_ray- self.center).shape)
-    print(np.linalg.norm(current_ray-self.center, axis=1).shape)
     distance = np.min(np.linalg.norm(current_ray-self.center, axis=1) - intersects_limit)
-  
+
+    print(distance)
+
     if distance <= 0:
       return distance
 
